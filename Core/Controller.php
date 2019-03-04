@@ -9,10 +9,7 @@ class Controller
 
     public function __construct()
     {
-        session_start();
-
         $this->view = new \Core\View(\App\Config::PATH_VIEWS);
-
         $this->database_connection = new \Core\AdapterPDO(
             \App\Config::$database['server'],
             \App\Config::$database['host'],

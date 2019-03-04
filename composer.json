@@ -4,5 +4,8 @@
             "App\\": "App/",
             "Core\\": "Core/"
         }
+    },
+    "require": {
+        "ext-pdo": "*"
     }
 }
