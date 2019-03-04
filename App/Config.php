@@ -7,7 +7,7 @@ class Config
     public static $database = [
         'server' => 'mysql',
         'host' => '127.0.0.1',
-        'name' => 'test',
+        'name' => 'premmerce',
         'charset' => 'utf8',
         'user_name' => 'root',
         'user_password' => '',
@@ -18,8 +18,8 @@ class Config
         ]
     ];
 
-    public const PATH_CONTROLLERS = __DIR__ . 'Controllers';
-    public const PATH_VIEWS = __DIR__ . 'Views';
+    const NAMESPACE_CONTROLLERS = '\\App\\Controllers\\';
+    const PATH_VIEWS = __DIR__ . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR;
 
     public static function setRuntimeParams()
     {
@@ -42,12 +42,12 @@ class Config
     {
         if ($exception instanceof \Core\Exceptions\ResourceNotFoundException) {
             http_response_code(404);
-            include_once $_SERVER['DOCUMENT_ROOT'] . '/App/Views/error/404.php';
+            echo 404;
             exit;
         }
 
         http_response_code(500);
-        include_once $_SERVER['DOCUMENT_ROOT'] . '/App/Views/error/500.php';
+        echo 500;
         exit;
     }
 }

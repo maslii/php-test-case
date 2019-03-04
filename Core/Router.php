@@ -2,7 +2,7 @@
 
 namespace Core;
 
-use App\Config;
+use App\Config, Core\Exceptions;
 
 class Router
 {
@@ -13,13 +13,12 @@ class Router
     public function __construct($uri)
     {
         $controller = null;
-        $controller_path = rtrim(\App\Config::PATH_CONTROLLERS, '/\\') . '/';
         $this->splitUri($uri);
 
-        if (class_exists($controller_path . $this->controller_name)) {
-            $controller = $controller_path . $this->controller_name;
+        if (class_exists(Config::NAMESPACE_CONTROLLERS . $this->controller_name)) {
+            $controller = Config::NAMESPACE_CONTROLLERS . $this->controller_name;
         } else {
-            throw new \Core\Exceptions\ResourceNotFoundException();
+            throw new Exceptions\ResourceNotFoundException();
         }
 
         $controller = new $controller();
@@ -27,7 +26,7 @@ class Router
         if (method_exists($controller, $this->action_name)) {
             \call_user_func_array([$controller, $this->action_name], $this->action_params);
         } else {
-            throw new \Core\Exceptions\ResourceNotFoundException();
+            throw new Exceptions\ResourceNotFoundException();
         }
     }
 
@@ -35,7 +34,7 @@ class Router
     {
         $uriArray = trim($uri, '/');
         $uriArray = filter_var($uriArray, FILTER_SANITIZE_URL);
-        $uriArray = explode('/', $uriArray);
+        $uriArray = $uriArray === '' ? [] : explode('/', $uriArray);
 
         $this->controller_name = isset($uriArray[0]) ? $uriArray[0] : 'index';
         $this->action_name = isset($uriArray[1]) ? $uriArray[1] : 'index';

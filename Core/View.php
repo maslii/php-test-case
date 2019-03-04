@@ -2,27 +2,23 @@
 
 namespace Core;
 
+use App\Config;
+
 class View
 {
-    protected $view_path;
-
-    public function __construct($path)
-    {
-        $this->view_path = rtrim($path, '/\\') . '/';
-    }
-
     public function render($views, $title, $data = [])
     {
         foreach ($views as $view) {
-            if (!is_file($this->view_path . $view . '.php')) {
+            if (!is_file(Config::PATH_VIEWS . $view . '.php')) {
                 throw new \RuntimeException();
             }
         }
 
         try {
+            ob_start();
+
             foreach ($views as $view) {
-                ob_start();
-                $this->include($view . '.php', ['view_data' => $data]);
+                $this->protectedInclude(Config::PATH_VIEWS . $view . '.php', ['view_data' => $data]);
             }
 
             $output = ob_get_clean();
@@ -36,13 +32,13 @@ class View
         }
 
         ob_start();
-        $this->include(\App\Config::PATH_VIEWS . 'layout.php', ['view_content' => $output, 'view_title' => $title]);
+        $this->protectedInclude(Config::PATH_VIEWS . 'layout.php', ['view_content' => $output, 'view_title' => $title]);
         echo ob_get_clean();
     }
 
-    protected function include($view, $data)
+    protected function protectedInclude()
     {
-        extract($data, EXTR_OVERWRITE);
+        extract(func_get_arg(1), EXTR_OVERWRITE);
         include func_get_arg(0);
     }
 }
