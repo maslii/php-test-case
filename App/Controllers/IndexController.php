@@ -2,21 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Models;
+use App\Models, Core\Controller;
 
-class IndexController extends \Core\Controller
+class IndexController extends Controller
 {
     public function index()
     {
-        $model = new Models\UsersModel($this->database_connection);
+        $model = new Models\UserModel($this->database_connection);
 
-        $this->view->render(
+        $this->view->renderLayout(
             [
                 'index'
             ],
-            'Home',
+            'Users',
             [
-                'param1' => 'Lorem'
+                'users' => $model->getUsers()
             ]
         );
     }

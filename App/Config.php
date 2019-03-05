@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Core\Exceptions;
+
 class Config
 {
     public static $database = [
@@ -38,16 +40,28 @@ class Config
         }
     }
 
-    public static function exceptionHandler(\Throwable $exception)
+    public static function exceptionHandler($exception)
     {
-        if ($exception instanceof \Core\Exceptions\ResourceNotFoundException) {
+        if ($exception instanceof Exceptions\ResourceNotFoundException) {
             http_response_code(404);
-            echo 404;
+            echo 'Not Found!';
+            exit;
+        }
+
+        if ($exception instanceof Exceptions\MethodNotAllowedException) {
+            http_response_code(405);
+            echo 'Method Not Allowed';
+            exit;
+        }
+
+        if ($exception instanceof Exceptions\BadRequestException) {
+            http_response_code(403);
+            echo 'Bad Request';
             exit;
         }
 
         http_response_code(500);
-        echo 500;
+        var_dump($exception);
         exit;
     }
 }

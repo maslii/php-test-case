@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use PDO;
+
 class AdapterPDO
 {
     protected $dsn;
@@ -27,6 +29,6 @@ class AdapterPDO
 
     public function getConnection()
     {
-        return new \PDO($this->dsn, $this->user_name, $this->user_password, $this->options);
+        return new PDO($this->dsn, $this->user_name, $this->user_password, $this->options);
     }
 }

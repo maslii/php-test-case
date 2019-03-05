@@ -6,7 +6,17 @@ use App\Config;
 
 class View
 {
-    public function render($views, $title, $data = [])
+    public function renderPart($views, $data = [])
+    {
+        $this->render($views, '', false, $data);
+    }
+
+    public function renderLayout($views, $title, $data = [])
+    {
+        $this->render($views, $title, true, $data);
+    }
+
+    protected function render($views, $title, $layout, $data = [])
     {
         foreach ($views as $view) {
             if (!is_file(Config::PATH_VIEWS . $view . '.php')) {
@@ -31,9 +41,13 @@ class View
             throw $t;
         }
 
-        ob_start();
-        $this->protectedInclude(Config::PATH_VIEWS . 'layout.php', ['view_content' => $output, 'view_title' => $title]);
-        echo ob_get_clean();
+        if ($layout) {
+            ob_start();
+            $this->protectedInclude(Config::PATH_VIEWS . 'layout.php', ['view_content' => $output, 'view_title' => $title]);
+            echo ob_get_clean();
+        } else {
+            echo $output;
+        }
     }
 
     protected function protectedInclude()
