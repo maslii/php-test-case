@@ -61,7 +61,7 @@ class Config
         }
 
         http_response_code(500);
-        var_dump($exception);
+        echo 'Server Error';
         exit;
     }
 }
