@@ -13,7 +13,14 @@ $(document).ready(function () {
     });
 
     $('#btn-add').on('click', function () {
-
+        $.ajax({
+            url: '/user/create',
+            type: "POST"
+        }).done(function (data) {
+            $('.container > #modal-create').remove();
+            $('.container').append(data);
+            $('#modal-create').modal('show');
+        });
     });
 
 });

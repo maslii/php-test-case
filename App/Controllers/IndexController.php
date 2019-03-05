@@ -14,7 +14,7 @@ class IndexController extends Controller
             [
                 'index'
             ],
-            'Users',
+            'Home',
             [
                 'users' => $model->getUsers()
             ]

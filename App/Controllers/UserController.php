@@ -29,7 +29,19 @@ class UserController extends Controller
         $model = new Models\CountryModel($this->database_connection);
         $countries = $model->getCountries();
 
-        $this->view->renderPart(['update'], ['user' => $user, 'countries' => $countries]);
+        $this->view->renderPart(['modals/update'], ['user' => $user, 'countries' => $countries]);
+    }
+
+    public function create()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            throw new Exceptions\MethodNotAllowedException();
+        }
+
+        $model = new Models\CountryModel($this->database_connection);
+        $countries = $model->getCountries();
+
+        $this->view->renderPart(['modals/create'], ['countries' => $countries]);
     }
 
     public function delete()
